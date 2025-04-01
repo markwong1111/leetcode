@@ -7,26 +7,24 @@ using std::string, std::vector, std::unordered_map, std::min, std::max;
 
 
 /**
- * Coin Change
+ * Min Cost Climbing Stairs
  *
- * Given an array of coin denominations and an integer amount n representing a total amount of money,
- * find the minimum number of coins that is needed to make up that amount.
+ * Given an array cost that represents the cost of step on a staircase,
+ * find the minimum cost to reach the top of the staircase.  
+ * You can start from either the 0th or 1st step and can climb one or two steps at a time.  
  * 
- * @note Time complexity: O(m * n)
+ * @note Time complexity: O(n)
  */
- int minCoin(vector<int>& coins, int n) {
-    vector<int> dp (n + 1, INT_MAX);
-    dp[0] = 0;
+ int minCost(vector<int> cost) {
+    int n = cost.size();
 
-    for (int i = 1; i <= n; i++) {
-        for (int coin : coins) {
-            if (coin <= i and dp[i - coin] != INT_MAX) {
-                dp[i] = min(dp[i], dp[i - coin] + 1);
-            }
-        }
+    vector<int> dp(n + 1, 0);
+
+    for (int i = 2; i <= n; i++) {
+        dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
     }
 
-    return dp[n] == INT_MAX ? -1 : dp[n];
+    return dp[n];
 }
 
 
@@ -52,13 +50,13 @@ int uniquePath(int m, int n) {
 
 /**
  * Longest Common Subsequence
- * 
+ *
  * Given two strings s and t, find the length of their longest common subsequence.
- * A subsequence is a sequence that appears in the same relative order but not necessarily contiguous.
+ * A subsequence appears in the same relative order but not necessarily contiguous.
  * 
  * @note Time complexity: O(m * n)
  */
-int lcs(const string& s, const string& t) {
+int longestCommonSubseq(string s, string t) {
     int m = s.length();
     int n = t.length();
     
@@ -80,10 +78,68 @@ int lcs(const string& s, const string& t) {
 
 
 /**
+ * Longest Palindromic Subsequence
+ * 
+ * Given a string s, find the length of the longest palindromic subsequence. 
+ * 
+ * @note Time complexity: O(n^2)
+ */
+int longestPalindromeSubseq(string s) {
+    int n = s.length(); 
+
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+
+    for (int i = 0; i < n; i++) {
+        dp[i][i] = 1;
+    }
+
+    // we start at the last row
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i + 1; j < n; j++) {
+            if (s[i] == s[j]) {
+                dp[i][j] = dp[i + 1][j - 1] + 2;
+            }
+            else {
+                dp[i][j] = max(dp[i + 1][j], dp[1][j - 1]);
+            }
+        }
+    }
+
+    return dp[0][n - 1];
+}
+
+
+/**
+ * Longest Increasing Subsequence
+ * 
+ * Given an array of integers, find the length of the longest increasing subsequence.
+ * 
+ * @note Time complexity: O(n^2)
+ */
+int longestIncreaseSubseq(vector<int> v) {
+    int n = v.size();
+    int result = 0;
+
+    vector<int> dp(n, 1);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (v[i] > v[j] and dp[i] < dp[j] + 1) {
+                dp[i] = dp[j] + 1;
+            }
+        }
+        result = max(result, dp[i]);
+    }
+    
+    return result;
+}
+
+
+/**
  * Knapsack Problem 
  * 
  * Given n items, where each item has a weight and a value, and a bag with capacity w, 
- * find the maximum total value by selecting items without exceeding the capacity.
+ * determine the maximum total value by selecting items without exceeding the capacity.
  * 
  * @note Time complexity: O(n * w)
  */
