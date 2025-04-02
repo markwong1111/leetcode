@@ -124,8 +124,8 @@ int longestIncreaseSubseq(vector<int> v) {
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < i; j++) {
-            if (v[i] > v[j] and dp[i] < dp[j] + 1) {
-                dp[i] = dp[j] + 1;
+            if (v[i] > v[j]) {
+                dp[i] = max(dp[i], dp[j] + 1);
             }
         }
         result = max(result, dp[i]);
