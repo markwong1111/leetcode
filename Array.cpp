@@ -84,7 +84,7 @@ string minWindow(string s, string t) {
             count--;
         }
 
-        map[right]--;
+        map[s[right]]--;
 
         while (count == 0) {
             if (right - left + 1 < min) {
@@ -92,7 +92,7 @@ string minWindow(string s, string t) {
                 index = left;
             }
       
-            if (map[left] == 0) {
+            if (map[s[left]] == 0) {
                 count++;
             }
 
